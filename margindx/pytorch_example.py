@@ -48,6 +48,11 @@ if len(sys.argv[:]) > 1:
     epochs = int(sys.argv[1])
 print(f"The epochs are {epochs}")
 
+try_cuda = False
+if len(sys.argv[:]) > 2:
+    try_cuda = bool(sys.argv[2])
+print(f"Try cuda is {try_cuda}")
+
 class ImageClassifier(nn.Module):
     def __init__(self):
         super().__init__()
@@ -69,7 +74,8 @@ class ImageClassifier(nn.Module):
 mlflow.set_experiment("/mlflow-pytorch-quickstart")
 
 # Get cpu or gpu for training.
-device = "cuda" if torch.cuda.is_available() else "cpu"
+if try_cuda:
+    device = "cuda" if torch.cuda.is_available() else "cpu"
 
 print(f"The device is {device}")
 
