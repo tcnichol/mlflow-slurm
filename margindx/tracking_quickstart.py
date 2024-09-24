@@ -1,6 +1,8 @@
 from dotenv import load_dotenv
 
 load_dotenv()
+# TODO
+# https://mlflow.org/docs/latest/deep-learning/pytorch/guide/index.html
 
 #!/usr/bin/env python
 # coding: utf-8
