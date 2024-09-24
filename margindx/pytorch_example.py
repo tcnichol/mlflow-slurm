@@ -8,6 +8,7 @@ from torchvision.transforms import ToTensor
 from dotenv import load_dotenv
 load_dotenv()
 import mlflow
+import sys
 
 from mlflow.server import get_app_client
 
@@ -42,6 +43,10 @@ print(f"Size of test dataset: {len(test_data)}")
 train_dataloader = DataLoader(training_data, batch_size=64)
 test_dataloader = DataLoader(test_data, batch_size=64)
 
+epochs = 3
+if len(sys.argv[:]) > 1:
+    epochs = int(sys.argv[1])
+print(f"The epochs are {epochs}")
 
 class ImageClassifier(nn.Module):
     def __init__(self):
@@ -65,6 +70,8 @@ mlflow.set_experiment("/mlflow-pytorch-quickstart")
 
 # Get cpu or gpu for training.
 device = "cuda" if torch.cuda.is_available() else "cpu"
+
+print(f"The device is {device}")
 
 
 def train(dataloader, model, loss_fn, metrics_fn, optimizer, epoch):
@@ -125,7 +132,6 @@ def evaluate(dataloader, model, loss_fn, metrics_fn, epoch):
 
     print(f"Eval metrics: \nAccuracy: {eval_accuracy:.2f}, Avg loss: {eval_loss:2f} \n")
 
-epochs = 3
 loss_fn = nn.CrossEntropyLoss()
 metric_fn = Accuracy(task="multiclass", num_classes=10).to(device)
 model = ImageClassifier().to(device)
