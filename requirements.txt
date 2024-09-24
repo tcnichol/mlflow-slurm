@@ -1,6 +1,7 @@
-mlflow-skinny
+mlflow
 jinja2
 numpy
 pandas
+scipy
 scikit-learn
 python-dotenv

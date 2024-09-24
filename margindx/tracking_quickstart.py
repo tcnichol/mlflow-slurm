@@ -77,7 +77,7 @@ accuracy = accuracy_score(y_test, y_pred)
 # In[4]:
 
 
-mlflow.set_experiment("MLflow Quickstart 2")
+mlflow.set_experiment("MLflow Quickstart 3")
 
 
 # ## Log the model, hyperparameters, and loss metrics to MLflow.
