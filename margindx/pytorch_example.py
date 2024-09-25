@@ -171,6 +171,7 @@ with mlflow.start_run() as run:
     mlflow.pytorch.log_model(model, "model")
 
 logged_model = f"runs:/{run.info.run_id}/model"
+print(f"The logged model is {logged_model}")
 loaded_model = mlflow.pyfunc.load_model(logged_model)
 
 outputs = loaded_model.predict(training_data[0][0][None, :].numpy())
