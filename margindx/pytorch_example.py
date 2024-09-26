@@ -9,12 +9,31 @@ from dotenv import load_dotenv
 load_dotenv()
 import mlflow
 import sys
+import os
+from torchvision.transforms import transforms
+from PIL import Image
 
 from mlflow.server import get_app_client
 
 mlflow.set_tracking_uri(uri="https://mlflow.margindx.software-dev.ncsa.illinois.edu")
-mlflow.set_experiment("MLflow Pytorch Example")
+mlflow.set_experiment("MLflow Pytorch Example Epoch 5")
 
+test_image_path = os.path.join(os.getcwd(), 'margindx', 'image1.png')
+def image_to_tensor(image_path):
+    # Open the image
+    img = Image.open(image_path).convert('L')  # Convert to grayscale
+
+    # Resize the image to 28x28
+    img = img.resize((28, 28))
+
+    # Convert the image to a tensor
+    transform = transforms.ToTensor()
+    tensor = transform(img)
+
+    # Add the batch and channel dimensions
+    tensor = tensor.unsqueeze(0).unsqueeze(0)
+
+    return tensor
 
 # tracking_uri = "https://mlflow.margindx.software-dev.ncsa.illinois.edu/"
 #
@@ -71,7 +90,7 @@ class ImageClassifier(nn.Module):
 
 # Set our tracking server uri for logging
 # mlflow.set_tracking_uri(uri="http://127.0.0.1:8080"
-mlflow.set_experiment("/mlflow-pytorch-quickstart")
+mlflow.set_experiment("/mlflow-pytorch-quickstart 5")
 
 # Get cpu or gpu for training.
 if try_cuda:
@@ -173,7 +192,8 @@ with mlflow.start_run() as run:
 logged_model = f"runs:/{run.info.run_id}/model"
 print(f"The logged model is {logged_model}")
 loaded_model = mlflow.pyfunc.load_model(logged_model)
-
+entry = training_data[0][0][None, :].numpy()
+new_entry = image_to_tensor(test_image_path)
 outputs = loaded_model.predict(training_data[0][0][None, :].numpy())
 
 
